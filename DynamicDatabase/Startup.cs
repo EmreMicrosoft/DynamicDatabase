@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DynamicDatabase.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDatabase
 {
@@ -18,14 +20,18 @@ namespace DynamicDatabase
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<RepositoryContext>(options =>
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllersWithViews();
         }
-
+        
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
