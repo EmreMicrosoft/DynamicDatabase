@@ -2,7 +2,7 @@
 
 namespace DynamicDatabase.Utilities.IoC
 {
-    public static class ServiceExtensions
+    public static class ServiceExtension
     {
         public static IServiceCollection AddDependencyResolvers
             (this IServiceCollection serviceCollection, IResolver[] modules)
