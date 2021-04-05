@@ -7,7 +7,7 @@ using DynamicDatabase.Entities.Base;
 
 namespace DynamicDatabase.Repos.DataAccess
 {
-    public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity>
+    public class RepositoryBase<TEntity, TContext> : IRepository<TEntity>
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
@@ -20,7 +20,7 @@ namespace DynamicDatabase.Repos.DataAccess
         }
 
         // ADD LIST
-        public void AddList(IList<TEntity> entities)
+        public void AddList(IEnumerable<TEntity> entities)
         {
             using var context = new TContext();
             context.AddRange(entities);
@@ -56,7 +56,7 @@ namespace DynamicDatabase.Repos.DataAccess
         }
 
         // UPDATE LIST
-        public void UpdateList(IList<TEntity> entities)
+        public void UpdateList(IEnumerable<TEntity> entities)
         {
             using var context = new TContext();
             context.UpdateRange(entities);
@@ -74,7 +74,7 @@ namespace DynamicDatabase.Repos.DataAccess
         }
 
         // DELETE LIST
-        public void DeleteList(IList<TEntity> entities)
+        public void DeleteList(IEnumerable<TEntity> entities)
         {
             using var context = new TContext();
             context.RemoveRange(entities);

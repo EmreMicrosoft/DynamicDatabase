@@ -5,10 +5,10 @@ using DynamicDatabase.Entities.Base;
 
 namespace DynamicDatabase.Repos.DataAccess
 {
-    public interface IEntityRepository<T> where T : class, IEntity, new()
+    public interface IRepository<T> where T : class, IEntity, new()
     {
         void Add(T entity);
-        void AddList(IList<T> entities);
+        void AddList(IEnumerable<T> entities);
 
 
         T Get(Expression<Func<T, bool>> filter);
@@ -16,10 +16,10 @@ namespace DynamicDatabase.Repos.DataAccess
 
 
         void Update(T entity);
-        void UpdateList(IList<T> entities);
+        void UpdateList(IEnumerable<T> entities);
 
 
         void Delete(T entity);
-        void DeleteList(IList<T> entities);
+        void DeleteList(IEnumerable<T> entities);
     }
 }
