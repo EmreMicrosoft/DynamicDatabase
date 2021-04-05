@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DynamicDatabase.Data.Entities.Base;
 
 namespace DynamicDatabase.Data.Access
 {
     public interface IRepository<T> where T : class, IEntity, new()
     {
-        void Add(T entity);
-        void AddList(IEnumerable<T> entities);
+        void AddAsync(T entity);
+        void AddListAsync(IList<T> entities);
 
 
-        T Get(Expression<Func<T, bool>> filter);
-        IList<T> GetList(Expression<Func<T, bool>> filter = null);
+        Task<T> GetAsync(Expression<Func<T, bool>> filter);
+        Task<IList<T>> GetListAsync(Expression<Func<T, bool>> filter = null);
 
 
-        void Update(T entity);
-        void UpdateList(IEnumerable<T> entities);
+        void UpdateAsync(T entity);
+        void UpdateListAsync(IList<T> entities);
 
 
-        void Delete(T entity);
-        void DeleteList(IEnumerable<T> entities);
+        void DeleteAsync(T entity);
+        void DeleteListAsync(IList<T> entities);
     }
 }

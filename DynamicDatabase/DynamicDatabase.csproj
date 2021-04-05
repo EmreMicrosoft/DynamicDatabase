@@ -14,8 +14,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Logic\Abstract\" />
-    <Folder Include="Logic\Concrete\" />
   </ItemGroup>
 
 </Project>
