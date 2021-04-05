@@ -4,9 +4,7 @@ using DynamicDatabase.Data.Repos.Abstract.ValueRecordRepos;
 
 namespace DynamicDatabase.Data.Repos.Concrete.ValueRecordRepos
 {
-    public class BooleanRepository
-        : RepositoryBase<BooleanRecord, RepositoryContext>,
-            IBooleanRepository
+    public class BooleanRepository : RepositoryBase<BooleanRecord>, IBooleanRepository
     {
     }
 }

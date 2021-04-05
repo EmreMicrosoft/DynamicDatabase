@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DynamicDatabase.Data.Repos.Abstract;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDatabase.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly IAttributeRepository _repos;
+        public HomeController(IAttributeRepository repos)
         {
+            _repos = repos;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(_repos.GetListAsync().Result);
         }
     }
 }

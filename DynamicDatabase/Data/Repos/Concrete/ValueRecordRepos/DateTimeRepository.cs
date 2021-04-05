@@ -4,9 +4,7 @@ using DynamicDatabase.Data.Repos.Abstract.ValueRecordRepos;
 
 namespace DynamicDatabase.Data.Repos.Concrete.ValueRecordRepos
 {
-    public class DateTimeRepository
-        : RepositoryBase<DateTimeRecord, RepositoryContext>,
-            IDateTimeRepository
+    public class DateTimeRepository : RepositoryBase<DateTimeRecord>, IDateTimeRepository
     {
     }
 }

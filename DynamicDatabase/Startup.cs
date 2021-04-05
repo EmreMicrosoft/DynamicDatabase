@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DynamicDatabase.Data;
+using DynamicDatabase.Data.Access;
 using DynamicDatabase.Utilities.IoC;
 using Microsoft.EntityFrameworkCore;
 

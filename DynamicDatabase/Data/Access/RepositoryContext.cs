@@ -2,7 +2,7 @@
 using DynamicDatabase.Data.Entities.ValueRecords;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicDatabase.Data
+namespace DynamicDatabase.Data.Access
 {
     public class RepositoryContext : DbContext
     {

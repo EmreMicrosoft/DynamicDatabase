@@ -4,9 +4,7 @@ using DynamicDatabase.Data.Repos.Abstract;
 
 namespace DynamicDatabase.Data.Repos.Concrete
 {
-    public class EntityTypeRepository
-        : RepositoryBase<EntityType, RepositoryContext>,
-            IEntityTypeRepository
+    public class EntityTypeRepository : RepositoryBase<EntityType>, IEntityTypeRepository
     {
     }
 }

@@ -4,9 +4,7 @@ using DynamicDatabase.Data.Repos.Abstract;
 
 namespace DynamicDatabase.Data.Repos.Concrete
 {
-    public class AttributeRepository
-        : RepositoryBase<Attribute, RepositoryContext>,
-            IAttributeRepository
+    public class AttributeRepository : RepositoryBase<Attribute>, IAttributeRepository
     {
     }
 }

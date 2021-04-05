@@ -4,9 +4,7 @@ using DynamicDatabase.Data.Repos.Abstract.ValueRecordRepos;
 
 namespace DynamicDatabase.Data.Repos.Concrete.ValueRecordRepos
 {
-    public class DecimalRepository
-        : RepositoryBase<DecimalRecord, RepositoryContext>,
-            IDecimalRepository
+    public class DecimalRepository : RepositoryBase<DecimalRecord>, IDecimalRepository
     {
     }
 }
