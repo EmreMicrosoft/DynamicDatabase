@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using DynamicDatabase.Entities.Base;
 
-namespace DynamicDatabase.Repos.DataAccess
+namespace DynamicDatabase.Data.Access
 {
     public class RepositoryBase<TEntity, TContext> : IRepository<TEntity>
         where TEntity : class, IEntity, new()

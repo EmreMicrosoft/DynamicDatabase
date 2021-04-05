@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using DynamicDatabase.Entities.Base;
 
-namespace DynamicDatabase.Repos.DataAccess
+namespace DynamicDatabase.Data.Access
 {
     public interface IRepository<T> where T : class, IEntity, new()
     {
