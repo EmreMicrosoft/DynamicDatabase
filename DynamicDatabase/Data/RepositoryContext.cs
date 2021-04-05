@@ -1,11 +1,12 @@
-﻿using DynamicDatabase.Entities;
-using DynamicDatabase.Entities.ValueRecords;
+﻿using DynamicDatabase.Data.Entities;
+using DynamicDatabase.Data.Entities.ValueRecords;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDatabase.Data
 {
     public class RepositoryContext : DbContext
     {
+        public RepositoryContext() {}
         public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)
         {

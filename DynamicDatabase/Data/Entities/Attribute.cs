@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DynamicDatabase.Entities.Base;
+using DynamicDatabase.Data.Entities.Base;
 
-namespace DynamicDatabase.Entities
+namespace DynamicDatabase.Data.Entities
 {
     public class Attribute : EntitiesBase, IEntity
     {

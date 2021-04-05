@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DynamicDatabase.Entities.Base;
+using DynamicDatabase.Data.Entities.Base;
 
-namespace DynamicDatabase.Entities.ValueRecords
+namespace DynamicDatabase.Data.Entities.ValueRecords
 {
     public class BooleanRecord : RecordsBase, IEntity
     {

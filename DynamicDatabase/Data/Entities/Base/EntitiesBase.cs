@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DynamicDatabase.Entities.Base
+namespace DynamicDatabase.Data.Entities.Base
 {
     public class EntitiesBase
     {

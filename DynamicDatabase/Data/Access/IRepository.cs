@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using DynamicDatabase.Entities.Base;
+using DynamicDatabase.Data.Entities.Base;
 
 namespace DynamicDatabase.Data.Access
 {
