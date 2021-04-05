@@ -1,5 +1,4 @@
-﻿using Core.Utilities.IoC;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDatabase.Utilities.IoC
 {

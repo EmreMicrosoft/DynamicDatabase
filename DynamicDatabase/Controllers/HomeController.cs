@@ -1,5 +1,4 @@
-﻿using DynamicDatabase.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDatabase.Controllers
 {
@@ -11,7 +10,6 @@ namespace DynamicDatabase.Controllers
 
         public IActionResult Index()
         {
-            //var entityType = new EntityType();
             return View();
         }
     }
