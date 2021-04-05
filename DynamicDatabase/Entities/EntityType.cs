@@ -3,11 +3,8 @@ using DynamicDatabase.Entities.Base;
 
 namespace DynamicDatabase.Entities
 {
-    public class EntityType : IEntity
+    public class EntityType : EntitiesBase, IEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(64)]
         public string Name { get; set; }
