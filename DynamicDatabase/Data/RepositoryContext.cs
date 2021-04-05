@@ -1,7 +1,6 @@
-﻿using System;
+﻿using DynamicDatabase.Entities;
 using DynamicDatabase.Entities.ValueRecords;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DynamicDatabase.Data
 {
