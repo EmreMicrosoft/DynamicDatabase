@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using DynamicDatabase.Data.Access;
 using DynamicDatabase.Utilities.IoC;
 using Microsoft.EntityFrameworkCore;
+using DynamicDatabase.Utilities;
 
 namespace DynamicDatabase
 {
@@ -27,6 +28,12 @@ namespace DynamicDatabase
             services.AddDependencyResolvers(new IResolver[] { new Resolver() });
 
             services.AddControllersWithViews();
+            
+            services.AddSignalR();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
         }
         
         
@@ -52,6 +59,8 @@ namespace DynamicDatabase
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<SignalRServer>("/signalRServer");
             });
         }
     }
