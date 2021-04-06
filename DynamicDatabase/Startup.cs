@@ -21,9 +21,8 @@ namespace DynamicDatabase
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<RepositoryContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<RepositoryContext>(
+                options => options.UseSqlite());
 
             services.AddDependencyResolvers(new IResolver[] { new Resolver() });
 

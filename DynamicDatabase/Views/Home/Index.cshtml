@@ -1,7 +1,11 @@
-﻿@{
+﻿@model DynamicDatabase.Models.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-
+    @*@foreach (var entityType in Model.EntityTypes)
+    {
+        <p>@entityType.Id - @entityType.Name</p>
+    }*@
 </div>

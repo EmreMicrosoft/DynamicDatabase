@@ -14,7 +14,8 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,6 +29,7 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EntityId = table.Column<int>(type: "INTEGER", nullable: false),
                     AttributeId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -44,6 +46,7 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EntityId = table.Column<int>(type: "INTEGER", nullable: false),
                     AttributeId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -60,6 +63,7 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<decimal>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EntityId = table.Column<int>(type: "INTEGER", nullable: false),
                     AttributeId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -75,7 +79,8 @@ namespace DynamicDatabase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,6 +94,7 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EntityId = table.Column<int>(type: "INTEGER", nullable: false),
                     AttributeId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -105,6 +111,7 @@ namespace DynamicDatabase.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<string>(type: "TEXT", maxLength: 2048, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     EntityTypeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EntityId = table.Column<int>(type: "INTEGER", nullable: false),
                     AttributeId = table.Column<int>(type: "INTEGER", nullable: false)

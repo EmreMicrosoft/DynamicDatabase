@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using DynamicDatabase.Data.Entities;
 
-namespace DynamicDatabase.Models
+namespace DynamicDatabase.Models.ViewModels
 {
-    public class HomeViewModel
+    public class AttributeViewModel
     {
+        public Attribute Attribute { get; set; }
         public IList<EntityType> EntityTypes { get; set; }
     }
 }

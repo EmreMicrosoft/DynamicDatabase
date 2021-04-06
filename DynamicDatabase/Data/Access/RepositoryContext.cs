@@ -6,7 +6,10 @@ namespace DynamicDatabase.Data.Access
 {
     public class RepositoryContext : DbContext
     {
-        public RepositoryContext() {}
+        public RepositoryContext()
+        {
+        }
+
         public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)
         {
@@ -20,5 +23,10 @@ namespace DynamicDatabase.Data.Access
         public DbSet<DecimalRecord> DecimalRecords { get; set; }
         public DbSet<IntegerRecord> IntegerRecords { get; set; }
         public DbSet<StringRecord> StringRecords { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=Data\\dynamicDatabase.db");
+        }
     }
 }
