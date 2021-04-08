@@ -7,62 +7,45 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DynamicDatabase.Data.Access;
 using DynamicDatabase.Data.Entities;
+using DynamicDatabase.Data.Repos.Abstract;
+using DynamicDatabase.Models.ViewModels;
+using DynamicDatabase.Utilities;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DynamicDatabase.Controllers
 {
     public class EntityTypesController : Controller
     {
-        private readonly RepositoryContext _context;
+        private readonly IEntityTypeRepository _entityTypeRepository;
+        private readonly IHubContext<SignalRServer> _signalRHub;
 
-        public EntityTypesController(RepositoryContext context)
+        public EntityTypesController(IEntityTypeRepository entityTypeRepository,
+            IHubContext<SignalRServer> signalRHub)
         {
-            _context = context;
+            _entityTypeRepository = entityTypeRepository;
+            _signalRHub = signalRHub;
         }
 
         // GET: EntityTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.EntityTypes.ToListAsync());
-        }
-
-        // GET: EntityTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var model = new EntityViewModel
             {
-                return NotFound();
-            }
-
-            var entityType = await _context.EntityTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (entityType == null)
-            {
-                return NotFound();
-            }
-
-            return View(entityType);
+                EntityTypes = await _entityTypeRepository.GetListAsync(),
+                EntityType = new EntityType()
+            };
+            return View(model);
         }
 
-        // GET: EntityTypes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
         // POST: EntityTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id,IsActive")] EntityType entityType)
+        public async void Create([Bind("Name,IsActive")] EntityType entityType)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(entityType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(entityType);
+            if (!ModelState.IsValid) return;
+            _entityTypeRepository.AddAsync(entityType);
+            await _signalRHub.Clients.All.SendAsync("loadData");
         }
 
         // GET: EntityTypes/Edit/5
@@ -73,7 +56,7 @@ namespace DynamicDatabase.Controllers
                 return NotFound();
             }
 
-            var entityType = await _context.EntityTypes.FindAsync(id);
+            var entityType = await _entityTypeRepository.GetAsync(x => x.Id == id);
             if (entityType == null)
             {
                 return NotFound();
@@ -82,8 +65,6 @@ namespace DynamicDatabase.Controllers
         }
 
         // POST: EntityTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Id,IsActive")] EntityType entityType)
@@ -93,61 +74,43 @@ namespace DynamicDatabase.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(entityType);
+
+            try
             {
-                try
-                {
-                    _context.Update(entityType);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EntityTypeExists(entityType.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await Task.Run(() => _entityTypeRepository
+                    .UpdateAsync(entityType));
             }
-            return View(entityType);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DataExists(entityType.Id))
+                {
+                    return NotFound();
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: EntityTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var entityType = await _context.EntityTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (entityType == null)
-            {
-                return NotFound();
-            }
-
-            return View(entityType);
-        }
 
         // POST: EntityTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async void DeleteConfirmed(int id)
         {
-            var entityType = await _context.EntityTypes.FindAsync(id);
-            _context.EntityTypes.Remove(entityType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var entityType = await _entityTypeRepository
+                .GetAsync(x => x.Id == id);
+            _entityTypeRepository.DeleteAsync(entityType);
         }
 
-        private bool EntityTypeExists(int id)
+        private async Task<bool> DataExists(int id)
         {
-            return _context.EntityTypes.Any(e => e.Id == id);
+            var data = await _entityTypeRepository
+                .GetAsync(e => e.Id == id);
+
+            return data != null;
         }
     }
 }

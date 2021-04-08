@@ -28,7 +28,7 @@
                                 </td>
                            </tr>`;
 
-                    console.log("k: " + k);
+                    // console.log("k: " + k);
                 });
 
                 $("#tableBody").html(tr);

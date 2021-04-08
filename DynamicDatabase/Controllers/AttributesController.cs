@@ -30,7 +30,9 @@ namespace DynamicDatabase.Controllers
         [HttpGet]
         public IActionResult GetAttributes()
         {
-            var result = _context.Attributes.ToListAsync().Result;
+            var result = _context.Attributes
+                .ToListAsync().Result;
+
             return Ok(result);
         }
 
@@ -41,23 +43,6 @@ namespace DynamicDatabase.Controllers
 
 
 
-        // GET: Attributes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attribute = await _context.Attributes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (attribute == null)
-            {
-                return NotFound();
-            }
-
-            return View(attribute);
-        }
 
         // GET: Attributes/Create
         public IActionResult Create()
