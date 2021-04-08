@@ -1,11 +1,12 @@
 ﻿$(() => {
-    var connection = new signalR
+    var connection = new window.signalR
         .HubConnectionBuilder()
         .withUrl("/signalRServer").build();
     connection.start();
-    connection.on("loadData", function () {
-        loadData();
-    })
+    connection.on("loadData",
+        function () {
+            loadData();
+        });
 
     loadData();
 
@@ -25,13 +26,15 @@
                                     <a href='../Attributes/Edit?id=${v.Id}'>Edit</a>
                                     <a href='../Attributes/Delete?id=${v.Id}'>Delete</a>
                                 </td>
-                           </tr>`
-                })
+                           </tr>`;
+
+                    console.log("k: " + k);
+                });
 
                 $("#tableBody").html(tr);
             },
             error: (error) => {
-                console.log(error)
+                console.log(error);
             }
         });
     }
