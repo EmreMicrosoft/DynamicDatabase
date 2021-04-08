@@ -3,7 +3,7 @@
         .HubConnectionBuilder()
         .withUrl("/signalRServer").build();
     connection.start();
-    connection.on("LoadData", function () {
+    connection.on("loadData", function () {
         loadData();
     })
 
@@ -18,9 +18,20 @@
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr += `<tr>
-<td>
-</tr>`
+                                <td>${v.EntityTypeId}</td>
+                                <td>${v.Name}</td>
+                                <td>${v.IsActive}</td>
+                                <td>
+                                    <a href='../Attributes/Edit?id=${v.Id}'>Edit</a>
+                                    <a href='../Attributes/Delete?id=${v.Id}'>Delete</a>
+                                </td>
+                           </tr>`
                 })
+
+                $("#tableBody").html(tr);
+            },
+            error: (error) => {
+                console.log(error)
             }
         });
     }

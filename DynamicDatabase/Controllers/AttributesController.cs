@@ -10,10 +10,12 @@ namespace DynamicDatabase.Controllers
     public class AttributesController : Controller
     {
         private readonly RepositoryContext _context;
+        private readonly IHubContext<SignalRServer> _signalRHub;
 
-        public AttributesController(RepositoryContext context)
+        public AttributesController(RepositoryContext context, IHubContext<SignalRServer> signalRHub)
         {
             _context = context;
+            _signalRHub = signalRHub;
         }
 
         // GET: Attributes
@@ -21,6 +23,20 @@ namespace DynamicDatabase.Controllers
         {
             return View(await _context.Attributes.ToListAsync());
         }
+
+
+        public IActionResult GetAttributes()
+        {
+            var result = _context.Attributes.ToListAsync();
+            return Ok(result);
+        }
+
+
+
+
+
+
+
 
         // GET: Attributes/Details/5
         public async Task<IActionResult> Details(int? id)
