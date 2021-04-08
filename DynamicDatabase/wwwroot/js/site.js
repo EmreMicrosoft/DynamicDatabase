@@ -19,7 +19,8 @@
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr += `<tr>
-                                <td>${v.EntityTypeId}</td>
+                                <td>${v.Id}</td>
+                                <td>${v.EntityTypeName}</td>
                                 <td>${v.Name}</td>
                                 <td>${v.IsActive}</td>
                                 <td>

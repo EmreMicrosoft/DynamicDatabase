@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DynamicDatabase.Data.Access;
 using DynamicDatabase.Data.Entities;
 using DynamicDatabase.Data.Repos.Abstract;
-using DynamicDatabase.Models.ViewModels;
+using DynamicDatabase.Models.Dtos;
 using Microsoft.AspNetCore.SignalR;
 using DynamicDatabase.Utilities;
 
@@ -12,42 +13,42 @@ namespace DynamicDatabase.Controllers
 {
     public class AttributesController : Controller
     {
-        private readonly RepositoryContext _context;
         private readonly IAttributeRepository _attributeRepository;
         private readonly IEntityTypeRepository _entityTypeRepository;
         private readonly IHubContext<SignalRServer> _signalRHub;
 
-        public AttributesController(RepositoryContext context,
-            IHubContext<SignalRServer> signalRHub,
-            IAttributeRepository attributeRepository,
-            IEntityTypeRepository entityTypeRepository)
+        public AttributesController(IAttributeRepository attributeRepository,
+            IEntityTypeRepository entityTypeRepository, IHubContext<SignalRServer> signalRHub)
         {
-            _context = context;
             _signalRHub = signalRHub;
             _attributeRepository = attributeRepository;
             _entityTypeRepository = entityTypeRepository;
         }
 
         // GET: Attributes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var model = new AttributeViewModel
-            {
-                EntityTypes = await _entityTypeRepository.GetListAsync(),
-                Attribute = new Attribute()
-            };
-
-            return View(model);
+            return View();
         }
 
 
         [HttpGet]
         public IActionResult GetAttributes()
         {
-            var result = _context.Attributes
-                .ToListAsync().Result;
-
-            return Ok(result);
+            return Ok(_attributeRepository
+                .GetListAsync().Result
+                .Select(item =>
+                    new AttributeDto
+                    {
+                        Id = item.Id,
+                        EntityTypeName = _entityTypeRepository
+                            .GetListAsync().Result
+                            .FirstOrDefault(x =>
+                                x.Id == item.EntityTypeId)?.Name,
+                        Name = item.Name,
+                        IsActive = item.IsActive
+                    })
+                .ToList());
         }
 
 
