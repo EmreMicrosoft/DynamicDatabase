@@ -27,9 +27,10 @@ namespace DynamicDatabase.Controllers
         }
 
 
+        [HttpGet]
         public IActionResult GetAttributes()
         {
-            var result = _context.Attributes.ToListAsync();
+            var result = _context.Attributes.ToListAsync().Result;
             return Ok(result);
         }
 
@@ -79,6 +80,7 @@ namespace DynamicDatabase.Controllers
 
             _context.Add(model.Attribute);
             await _context.SaveChangesAsync();
+            await _signalRHub.Clients.All.SendAsync("loadData");
             return RedirectToAction(nameof(Index));
         }
 
@@ -114,6 +116,7 @@ namespace DynamicDatabase.Controllers
                 {
                     _context.Update(attribute);
                     await _context.SaveChangesAsync();
+                    await _signalRHub.Clients.All.SendAsync("loadData");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -157,6 +160,7 @@ namespace DynamicDatabase.Controllers
             var attribute = await _context.Attributes.FindAsync(id);
             _context.Attributes.Remove(attribute);
             await _context.SaveChangesAsync();
+            await _signalRHub.Clients.All.SendAsync("loadData");
             return RedirectToAction(nameof(Index));
         }
 
