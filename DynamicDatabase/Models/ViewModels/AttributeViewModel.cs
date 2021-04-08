@@ -7,5 +7,7 @@ namespace DynamicDatabase.Models.ViewModels
     {
         public Attribute Attribute { get; set; }
         public IList<EntityType> EntityTypes { get; set; }
+
+        public int SelectedEntityTypeId { get; set; }
     }
 }
