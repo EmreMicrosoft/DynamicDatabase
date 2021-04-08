@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DynamicDatabase.Data.Access;
+using DynamicDatabase.Data.Entities;
+using DynamicDatabase.Data.Repos.Abstract;
 using DynamicDatabase.Models.ViewModels;
 using Microsoft.AspNetCore.SignalR;
 using DynamicDatabase.Utilities;
@@ -12,18 +13,31 @@ namespace DynamicDatabase.Controllers
     public class AttributesController : Controller
     {
         private readonly RepositoryContext _context;
+        private readonly IAttributeRepository _attributeRepository;
+        private readonly IEntityTypeRepository _entityTypeRepository;
         private readonly IHubContext<SignalRServer> _signalRHub;
 
-        public AttributesController(RepositoryContext context, IHubContext<SignalRServer> signalRHub)
+        public AttributesController(RepositoryContext context,
+            IHubContext<SignalRServer> signalRHub,
+            IAttributeRepository attributeRepository,
+            IEntityTypeRepository entityTypeRepository)
         {
             _context = context;
             _signalRHub = signalRHub;
+            _attributeRepository = attributeRepository;
+            _entityTypeRepository = entityTypeRepository;
         }
 
         // GET: Attributes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Attributes.ToListAsync());
+            var model = new AttributeViewModel
+            {
+                EntityTypes = await _entityTypeRepository.GetListAsync(),
+                Attribute = new Attribute()
+            };
+
+            return View(model);
         }
 
 
@@ -38,120 +52,79 @@ namespace DynamicDatabase.Controllers
 
 
 
-
-
-
-
-
-
-        // GET: Attributes/Create
-        public IActionResult Create()
-        {
-            var model = new AttributeViewModel
-            {
-                Attribute = new Data.Entities.Attribute(),
-                EntityTypes = _context.EntityTypes.ToList()
-            };
-
-            return View(model);
-        }
-
-        // POST: Attributes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AttributeViewModel model)
+        public async void Create([Bind("EntityTypeId,Name,IsActive")] Attribute attribute)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return;
 
-            _context.Add(model.Attribute);
-            await _context.SaveChangesAsync();
+            _attributeRepository.AddAsync(attribute);
             await _signalRHub.Clients.All.SendAsync("loadData");
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: Attributes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var attribute = await _context.Attributes.FindAsync(id);
+            var attribute = await _attributeRepository
+                .GetAsync(x => x.Id == id);
+
             if (attribute == null)
-            {
                 return NotFound();
-            }
+
             return View(attribute);
         }
 
         // POST: Attributes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EntityTypeId,Name,Id,IsActive")] Data.Entities.Attribute attribute)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("EntityTypeId,Name,Id,IsActive")] Attribute attribute)
         {
             if (id != attribute.Id)
-            {
                 return NotFound();
+
+            if (!ModelState.IsValid)
+                return View(attribute);
+
+            try
+            {
+                await Task.Run(() => _attributeRepository
+                    .UpdateAsync(attribute));
+
+                await _signalRHub.Clients.All.SendAsync("loadData");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DataExists(attribute.Id).Result)
+                    return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(attribute);
-                    await _context.SaveChangesAsync();
-                    await _signalRHub.Clients.All.SendAsync("loadData");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AttributeExists(attribute.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(attribute);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Attributes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var attribute = await _context.Attributes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (attribute == null)
-            {
-                return NotFound();
-            }
-
-            return View(attribute);
-        }
 
         // POST: Attributes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async void DeleteConfirmed(int id)
         {
-            var attribute = await _context.Attributes.FindAsync(id);
-            _context.Attributes.Remove(attribute);
-            await _context.SaveChangesAsync();
+            var attribute = await _attributeRepository
+                .GetAsync(x => x.Id == id);
+            _attributeRepository.DeleteAsync(attribute);
+
             await _signalRHub.Clients.All.SendAsync("loadData");
-            return RedirectToAction(nameof(Index));
         }
 
-        private bool AttributeExists(int id)
+        private async Task<bool> DataExists(int id)
         {
-            return _context.Attributes.Any(e => e.Id == id);
+            var data = await _attributeRepository
+                .GetAsync(e => e.Id == id);
+
+            return data != null;
         }
     }
 }

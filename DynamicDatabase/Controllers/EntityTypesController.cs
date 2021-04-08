@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DynamicDatabase.Data.Access;
 using DynamicDatabase.Data.Entities;
 using DynamicDatabase.Data.Repos.Abstract;
 using DynamicDatabase.Models.ViewModels;
@@ -34,7 +29,18 @@ namespace DynamicDatabase.Controllers
                 EntityTypes = await _entityTypeRepository.GetListAsync(),
                 EntityType = new EntityType()
             };
+
             return View(model);
+        }
+
+        
+        [HttpGet]
+        public IActionResult GetEntityTypes()
+        {
+            var result = _entityTypeRepository
+                .GetListAsync().Result;
+
+            return Ok(result);
         }
 
 
@@ -44,6 +50,7 @@ namespace DynamicDatabase.Controllers
         public async void Create([Bind("Name,IsActive")] EntityType entityType)
         {
             if (!ModelState.IsValid) return;
+
             _entityTypeRepository.AddAsync(entityType);
             await _signalRHub.Clients.All.SendAsync("loadData");
         }
@@ -52,27 +59,25 @@ namespace DynamicDatabase.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var entityType = await _entityTypeRepository.GetAsync(x => x.Id == id);
+            var entityType = await _entityTypeRepository
+                .GetAsync(x => x.Id == id);
+
             if (entityType == null)
-            {
                 return NotFound();
-            }
+
             return View(entityType);
         }
 
         // POST: EntityTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,IsActive")] EntityType entityType)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Name,Id,IsActive")] EntityType entityType)
         {
             if (id != entityType.Id)
-            {
                 return NotFound();
-            }
 
             if (!ModelState.IsValid)
                 return View(entityType);
@@ -81,19 +86,17 @@ namespace DynamicDatabase.Controllers
             {
                 await Task.Run(() => _entityTypeRepository
                     .UpdateAsync(entityType));
+
+                await _signalRHub.Clients.All.SendAsync("loadData");
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DataExists(entityType.Id))
-                {
+                if (!DataExists(entityType.Id).Result)
                     return NotFound();
-                }
             }
 
             return RedirectToAction(nameof(Index));
         }
-
-
 
         // POST: EntityTypes/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -103,7 +106,10 @@ namespace DynamicDatabase.Controllers
             var entityType = await _entityTypeRepository
                 .GetAsync(x => x.Id == id);
             _entityTypeRepository.DeleteAsync(entityType);
+
+            await _signalRHub.Clients.All.SendAsync("loadData");
         }
+
 
         private async Task<bool> DataExists(int id)
         {
