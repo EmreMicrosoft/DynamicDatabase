@@ -2,7 +2,7 @@
 
 namespace DynamicDatabase.Data.Entities.Base
 {
-    public class RecordsBase : EntitiesBase
+    public class RecordsBase : EntityBase
     {
         [Required]
         public int EntityTypeId { get; set; }

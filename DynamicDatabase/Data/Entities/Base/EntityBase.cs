@@ -2,7 +2,7 @@
 
 namespace DynamicDatabase.Data.Entities.Base
 {
-    public class EntitiesBase
+    public class EntityBase
     {
         [Key] public int Id { get; set; }
         public bool IsActive { get; set; }

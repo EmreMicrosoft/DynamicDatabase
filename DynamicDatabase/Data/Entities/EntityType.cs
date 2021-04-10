@@ -3,7 +3,7 @@ using DynamicDatabase.Data.Entities.Base;
 
 namespace DynamicDatabase.Data.Entities
 {
-    public class EntityType : EntitiesBase, IEntity
+    public class EntityType : EntityBase, IEntity
     {
         [Required]
         [StringLength(64)]

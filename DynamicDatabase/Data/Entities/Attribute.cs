@@ -3,7 +3,7 @@ using DynamicDatabase.Data.Entities.Base;
 
 namespace DynamicDatabase.Data.Entities
 {
-    public class Attribute : EntitiesBase, IEntity
+    public class Attribute : EntityBase, IEntity
     {
         [Required]
         public int EntityTypeId { get; set; }
