@@ -51,8 +51,11 @@ namespace DynamicDatabase.Controllers
         {
             if (!ModelState.IsValid) return;
 
-            _entityTypeRepository.AddAsync(entityType);
-            await _signalRHub.Clients.All.SendAsync("loadData");
+            await Task.Run(() => _entityTypeRepository
+                .AddAsync(entityType));
+
+            await _signalRHub.Clients.All
+                .SendAsync("loadData");
         }
 
         // GET: EntityTypes/Edit/5
