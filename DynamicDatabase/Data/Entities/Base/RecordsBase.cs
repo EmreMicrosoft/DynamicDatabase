@@ -8,9 +8,9 @@ namespace DynamicDatabase.Data.Entities.Base
         public int EntityTypeId { get; set; }
 
         [Required]
-        public int EntityId { get; set; }
+        public int AttributeId { get; set; }
 
         [Required]
-        public int AttributeId { get; set; }
+        public int EntityId { get; set; }
     }
 }
